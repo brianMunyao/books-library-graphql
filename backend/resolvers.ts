@@ -1,56 +1,89 @@
 import { PrismaClient } from '@prisma/client';
+import {
+	createAuthor,
+	getAllAuthors,
+	getSingleAuthor,
+} from './src/services/author.service';
+import {
+	getAllBooks,
+	getBooksByAuthorId,
+	getSingleBook,
+} from './src/services/book.service';
+import {
+	getAllReviews,
+	getReviewsByBookId,
+	getSingleReview,
+} from './src/services/review.service';
 
 const prisma = new PrismaClient();
 
 const resolvers = {
 	Query: {
 		books: async () => {
-			const res = await prisma.book.findMany();
-			return res;
+			const books = await getAllBooks();
+			return books;
 		},
-		// game: (_: any, args: { id: string }) =>
-		// 	_db.games.find((g) => g.id === args.id),
+		book: async (id: number) => {
+			const book = await getSingleBook(id);
+			return book;
+		},
 
 		authors: async () => {
-			const res = await prisma.author.findMany();
-			return res;
+			const authors = await getAllAuthors();
+			return authors;
 		},
-		// author: (_: any, args: { id: string }) =>
-		// 	_db.authors.find((a) => a.id === args.id),
+		author: async (id: number) => {
+			const author = await getSingleAuthor(id);
+			return author;
+		},
 
 		reviews: async () => {
-			const res = await prisma.review.findMany();
-			return res;
+			const reviews = await getAllReviews();
+			return reviews;
 		},
-		// review: (_: any, args: { id: string }) =>
-		// 	_db.reviews.find((r) => r.id === args.id),
+		review: async (id: number) => {
+			const review = await getSingleReview(id);
+			return review;
+		},
 	},
-	// Game: {
-	// 	reviews(parent: any) {
-	// 		return _db.reviews.filter((r) => r.game_id === parent.id);
-	// 	},
-	// },
-	// Author: {
-	// 	reviews(parent: any) {
-	// 		return _db.reviews.filter((r) => r.author_id === parent.id);
-	// 	},
-	// },
-	// Review: {
-	// 	author(parent: any) {
-	// 		return _db.authors.find((a) => a.id === parent.author_id);
-	// 	},
-	// 	game(parent: any) {
-	// 		return _db.games.find((g) => g.id === parent.game_id);
-	// 	},
-	// },
+	Book: {
+		async reviews(parent: any) {
+			const reviews = await getReviewsByBookId(parent.id);
+			return reviews;
+		},
+		async author(parent: any) {
+			const author = await getSingleAuthor(parent.author_id);
+			return author;
+		},
+	},
+	Author: {
+		async books(parent: any) {
+			const books = await getBooksByAuthorId(parent.id);
+			return books;
+		},
+	},
+	Review: {
+		async book(parent: any) {
+			const book = await getSingleBook(parent.book_id);
+			return book;
+		},
+	},
 	Mutation: {
 		createBook: async (_: any, args: any) => {
-			const newBook = await prisma.book.create({ data: args.book });
-			return newBook;
+			const author = await createAuthor(args.book.author.name);
+			const newBook = await prisma.book.create({
+				data: { title: args.book.title, author_id: author.id },
+			});
+			return { ...newBook, author };
 		},
 		deleteBook: async (_: any, args: any) => {
 			const book = await prisma.book.delete({ where: { id: args.id } });
 			return book;
+		},
+
+		createReview: async (_: any, args: any) => {
+			const review = await prisma.review.create({ data: args.review });
+			return review;
 		},
 	},
 };

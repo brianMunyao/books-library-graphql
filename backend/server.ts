@@ -4,6 +4,7 @@ import http from 'http';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+require('dotenv').config();
 
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
@@ -13,9 +14,9 @@ const PORT = process.env.PORT ?? 4000;
 const app = express();
 const httpServer = http.createServer(app);
 
-interface MyContext {
-	// token?: string;
-}
+// interface MyContext {
+// token?: string;
+// }
 
 const server = new ApolloServer({
 	typeDefs,
