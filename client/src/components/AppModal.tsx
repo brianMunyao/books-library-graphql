@@ -9,10 +9,6 @@ interface Props {
 	children: React.ReactNode;
 }
 
-// const customStyles = {
-// 	content: {},
-// };
-
 const AppModal = ({ isOpen, closeModal, title, children }: Props) => {
 	return (
 		<Modal
@@ -27,7 +23,8 @@ const AppModal = ({ isOpen, closeModal, title, children }: Props) => {
 					bottom: 'auto',
 					marginRight: '-50%',
 					transform: 'translate(-50%, -50%)',
-					minWidth: 300,
+					maxWidth: '400px',
+					width: '100%',
 				},
 				overlay: {
 					background: '#00000083',

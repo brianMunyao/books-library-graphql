@@ -27,11 +27,13 @@ const CREATE_BOOK = gql`
 const AddBook = ({ isOpen, closeModal, refetchBooks }: Props) => {
 	const [createBook, { loading, error }] = useMutation(CREATE_BOOK);
 
+	const initialValues = {
+		bookTitle: '',
+		author: '',
+	};
+
 	const formik = useFormik({
-		initialValues: {
-			bookTitle: '',
-			author: '',
-		},
+		initialValues,
 		validationSchema: Yup.object({
 			bookTitle: Yup.string().required('Field is required'),
 			author: Yup.string().required('Field is required'),
@@ -43,7 +45,11 @@ const AddBook = ({ isOpen, closeModal, refetchBooks }: Props) => {
 				},
 			}).then(() => {
 				closeModal();
-				refetchBooks && refetchBooks();
+				formik.setValues(initialValues);
+				formik.setTouched({ bookTitle: false, author: false });
+				if (refetchBooks) {
+					refetchBooks();
+				}
 			});
 		},
 	});
@@ -54,12 +60,12 @@ const AddBook = ({ isOpen, closeModal, refetchBooks }: Props) => {
 	return (
 		<form onSubmit={formik.handleSubmit}>
 			<AppModal isOpen={isOpen} closeModal={closeModal} title="Add Book">
-				{JSON.stringify(formik.errors)}
 				<FormInput
 					label="Book Title"
 					name="bookTitle"
 					value={formik.values.bookTitle}
 					error={formik.errors.bookTitle}
+					touched={formik.touched.bookTitle}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
 				/>
@@ -68,6 +74,7 @@ const AddBook = ({ isOpen, closeModal, refetchBooks }: Props) => {
 					name="author"
 					value={formik.values.author}
 					error={formik.errors.author}
+					touched={formik.touched.author}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
 				/>

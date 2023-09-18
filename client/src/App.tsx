@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { IoAdd } from 'react-icons/io5';
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 
-// Adds messages only in a dev environment
 loadDevMessages();
 loadErrorMessages();
 
@@ -31,7 +30,7 @@ const GET_BOOKS = gql`
 `;
 
 function App() {
-	const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(true);
+	const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
 	const openAddBookModal = () => setIsAddBookModalOpen(true);
 	const closeAddBookModal = () => setIsAddBookModalOpen(false);
 
@@ -62,6 +61,14 @@ function App() {
 							)}
 						</>
 					))}
+
+					{data.books.length === 0 && (
+						<center>
+							<i>
+								<span>No Books Added</span>
+							</i>
+						</center>
+					)}
 				</div>
 			</Container>
 

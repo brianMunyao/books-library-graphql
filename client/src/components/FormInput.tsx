@@ -6,11 +6,20 @@ interface Props {
 	label: string;
 	value: string;
 	error?: string;
+	touched?: boolean;
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	onBlur: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
-const FormInput = ({ name, label, value, error, onChange, onBlur }: Props) => {
+const FormInput = ({
+	name,
+	label,
+	value,
+	error,
+	touched,
+	onChange,
+	onBlur,
+}: Props) => {
 	return (
 		<Container>
 			<label htmlFor={name}>{label}</label>
@@ -23,7 +32,7 @@ const FormInput = ({ name, label, value, error, onChange, onBlur }: Props) => {
 				onBlur={onBlur}
 			/>
 
-			{error && <span className="error">{error}</span>}
+			{error && touched && <span className="error">{error}</span>}
 		</Container>
 	);
 };
