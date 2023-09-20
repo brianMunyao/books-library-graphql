@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "server.ts",
 	"scripts": {
-		"build": "npx tsc",
 		"migration": "npx prisma migrate dev",
-		"start": "npm run migration && node dist/server.js",
+		"build": "npx tsc && npm run migration",
+		"start": "node dist/server.js",
 		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
