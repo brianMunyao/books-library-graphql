@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { IBook } from '../utils/interfaces';
+import { AppContext } from '../utils/AppContext';
 
 interface Props {
 	itemNo: number;
@@ -8,11 +10,14 @@ interface Props {
 }
 
 const Book = ({ itemNo, book }: Props) => {
+	const { openBookInfoModal } = useContext(AppContext);
 	return (
 		<Container>
 			<span className="no">{itemNo}.</span>
 			<div className="title-con">
-				<p className="title">{book.title}</p>
+				<p className="title" onClick={() => openBookInfoModal(book.id)}>
+					{book.title}
+				</p>
 
 				<div className="bottom">
 					<span className="author">by {book.author?.name}</span>
@@ -42,6 +47,11 @@ const Container = styled.div`
 
 		.title {
 			font-size: 17px;
+
+			&:hover {
+				color: dodgerblue;
+				cursor: pointer;
+			}
 		}
 
 		.bottom {

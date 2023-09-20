@@ -31,3 +31,8 @@ export const createAuthor = async (name: string) => {
 
 	return newAuthor;
 };
+
+export const deleteAuthor = async (id: number) => {
+	const author = await prisma.author.delete({ where: { id } });
+	return author;
+};

@@ -53,11 +53,6 @@ const Container = styled.div`
 			border: 1.5px solid dodgerblue;
 		}
 	}
-
-	.error {
-		color: tomato;
-		font-size: 15px;
-	}
 `;
 
 export default FormInput;

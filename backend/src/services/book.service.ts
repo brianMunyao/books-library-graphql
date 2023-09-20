@@ -19,7 +19,7 @@ export const getAllBooks = async () => {
 };
 
 export const getSingleBook = async (id: number) => {
-	const book = await prisma.book.findFirstOrThrow({
+	const book = await prisma.book.findFirst({
 		where: { id },
 	});
 	return book;
@@ -36,4 +36,9 @@ export const createBook = async (newBook: INewBook) => {
 export const getBooksByAuthorId = async (author_id: number) => {
 	const books = await prisma.book.findMany({ where: { author_id } });
 	return books;
+};
+
+export const deleteBook = async (id: number) => {
+	const book = await prisma.book.delete({ where: { id } });
+	return book;
 };

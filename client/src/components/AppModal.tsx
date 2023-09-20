@@ -17,17 +17,18 @@ const AppModal = ({ isOpen, closeModal, title, children }: Props) => {
 			onRequestClose={closeModal}
 			style={{
 				content: {
-					top: '50%',
+					top: '5%',
 					left: '50%',
 					right: 'auto',
 					bottom: 'auto',
 					marginRight: '-50%',
-					transform: 'translate(-50%, -50%)',
-					maxWidth: '400px',
-					width: '100%',
+					transform: 'translate(-50%, 0)',
+					maxWidth: '500px',
+					width: '95%',
 				},
 				overlay: {
-					background: '#00000083',
+					background: '#000000c7',
+					overflow: 'auto',
 				},
 			}}
 		>
@@ -51,7 +52,7 @@ const Container = styled.div`
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 20px;
+		margin-bottom: 0px;
 		.closeBtn {
 			cursor: pointer;
 		}

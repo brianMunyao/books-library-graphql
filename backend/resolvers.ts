@@ -1,15 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 import {
 	createAuthor,
+	deleteAuthor,
 	getAllAuthors,
 	getSingleAuthor,
 } from './src/services/author.service';
 import {
+	deleteBook,
 	getAllBooks,
 	getBooksByAuthorId,
 	getSingleBook,
 } from './src/services/book.service';
 import {
+	deleteBookReviews,
 	getAllReviews,
 	getReviewsByBookId,
 	getSingleReview,
@@ -77,8 +80,11 @@ const resolvers = {
 			return { ...newBook, author };
 		},
 		deleteBook: async (_: any, args: any) => {
-			const book = await prisma.book.delete({ where: { id: args.id } });
-			return book;
+			await deleteBookReviews(args.id);
+
+			const deletedBook = await deleteBook(args.id);
+			await deleteAuthor(deletedBook.author_id);
+			return deletedBook;
 		},
 
 		createReview: async (_: any, args: any) => {

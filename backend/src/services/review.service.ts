@@ -31,3 +31,8 @@ export const getReviewsByBookId = async (book_id: number) => {
 	const reviews = await prisma.review.findMany({ where: { book_id } });
 	return reviews;
 };
+
+export const deleteBookReviews = async (book_id: number) => {
+	const reviews = await prisma.review.deleteMany({ where: { book_id } });
+	return reviews;
+};
