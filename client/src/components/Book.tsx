@@ -1,21 +1,24 @@
-import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { IBook } from '../utils/interfaces';
-import { AppContext } from '../utils/AppContext';
 
 interface Props {
 	itemNo: number;
 	book: IBook;
+	openBook?: () => void;
 }
 
-const Book = ({ itemNo, book }: Props) => {
-	const { openBookInfoModal } = useContext(AppContext);
+const Book = ({ itemNo, book, openBook }: Props) => {
 	return (
 		<Container>
 			<span className="no">{itemNo}.</span>
 			<div className="title-con">
-				<p className="title" onClick={() => openBookInfoModal(book.id)}>
+				<p
+					className="title"
+					onClick={() => {
+						if (openBook) openBook();
+					}}
+				>
 					{book.title}
 				</p>
 

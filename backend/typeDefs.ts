@@ -21,13 +21,13 @@ type Review {
 
 type Query {
     books: [Book]
-    book(id: ID!): Book
+    book(id: Int!): Book
 
     authors: [Author]
-    author(id: ID!): Author
+    author(id: Int!): Author
 
     reviews: [Review]
-    review(id: ID!): Review
+    review(id: Int!): Review
 }
 
 input AuthorInput {

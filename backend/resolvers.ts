@@ -26,7 +26,7 @@ const resolvers = {
 			const books = await getAllBooks();
 			return books;
 		},
-		book: async (id: number) => {
+		book: async (_: any, { id }: { id: number }) => {
 			const book = await getSingleBook(id);
 			return book;
 		},
@@ -35,7 +35,7 @@ const resolvers = {
 			const authors = await getAllAuthors();
 			return authors;
 		},
-		author: async (id: number) => {
+		author: async (_: any, { id }: { id: number }) => {
 			const author = await getSingleAuthor(id);
 			return author;
 		},
@@ -44,7 +44,7 @@ const resolvers = {
 			const reviews = await getAllReviews();
 			return reviews;
 		},
-		review: async (id: number) => {
+		review: async (_: any, { id }: { id: number }) => {
 			const review = await getSingleReview(id);
 			return review;
 		},

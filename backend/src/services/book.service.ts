@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const { book: Book } = new PrismaClient();
 
 export interface IBook {
 	id: number;
@@ -14,19 +14,19 @@ export interface INewBook {
 }
 
 export const getAllBooks = async () => {
-	const books = await prisma.book.findMany();
+	const books = await Book.findMany();
 	return books;
 };
 
 export const getSingleBook = async (id: number) => {
-	const book = await prisma.book.findFirst({
+	const book = await Book.findUnique({
 		where: { id },
 	});
 	return book;
 };
 
 export const createBook = async (newBook: INewBook) => {
-	const book = await prisma.book.create({
+	const book = await Book.create({
 		data: newBook,
 	});
 
@@ -34,11 +34,11 @@ export const createBook = async (newBook: INewBook) => {
 };
 
 export const getBooksByAuthorId = async (author_id: number) => {
-	const books = await prisma.book.findMany({ where: { author_id } });
+	const books = await Book.findMany({ where: { author_id } });
 	return books;
 };
 
 export const deleteBook = async (id: number) => {
-	const book = await prisma.book.delete({ where: { id } });
+	const book = await Book.delete({ where: { id } });
 	return book;
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import styled from 'styled-components';
 
@@ -8,15 +8,15 @@ import { IReview } from '../utils/interfaces';
 import Rating from './Rating';
 import Separator from './Separator';
 import { IoCreate, IoTrash } from 'react-icons/io5';
+import { AppContext } from '../utils/AppContext';
 
 interface Props {
 	isOpen: boolean;
 	closeModal: () => void;
-	bookID: number | null;
 }
 
 const BOOK_INFO = gql`
-	query GetBookInfo($bookID: ID!) {
+	query GetBookInfo($bookID: Int!) {
 		book(id: $bookID) {
 			id
 			title
@@ -51,14 +51,15 @@ const DELETE_BOOK = gql`
 	}
 `;
 
-const BookInfoModal = ({ isOpen, closeModal, bookID }: Props) => {
+const BookInfoModal = ({ isOpen, closeModal }: Props) => {
+	const { bookInfoModalID } = useContext(AppContext);
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
 	const openReviewModal = () => setIsReviewModalOpen(true);
 	const closeReviewModal = () => setIsReviewModalOpen(false);
 
 	const { data, loading, error, refetch } = useQuery(BOOK_INFO, {
-		variables: { bookID },
+		variables: { bookID: bookInfoModalID },
 	});
 
 	const [createReview, { error: error1 }] = useMutation(CREATE_REVIEW);
@@ -111,7 +112,9 @@ const BookInfoModal = ({ isOpen, closeModal, bookID }: Props) => {
 							className="danger-btn"
 							onClick={() => {
 								deleteBook({
-									variables: { bookID: Number(bookID) },
+									variables: {
+										bookID: Number(bookInfoModalID),
+									},
 								}).finally(() => {
 									closeModal();
 								});
@@ -129,7 +132,7 @@ const BookInfoModal = ({ isOpen, closeModal, bookID }: Props) => {
 							variables: {
 								review: {
 									...review,
-									book_id: Number(bookID),
+									book_id: Number(bookInfoModalID),
 								},
 							},
 						}).then(() => {

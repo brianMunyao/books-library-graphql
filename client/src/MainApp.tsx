@@ -2,10 +2,6 @@ import { useContext, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import styled from 'styled-components';
 import { IoAdd } from 'react-icons/io5';
-import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
-
-loadDevMessages();
-loadErrorMessages();
 
 import { IBook } from './utils/interfaces';
 import Book from './components/Book';
@@ -32,7 +28,8 @@ const GET_BOOKS = gql`
 `;
 
 function MainApp() {
-	const { bookInfoModalID, closeBookInfoModal } = useContext(AppContext);
+	const { bookInfoModalID, closeBookInfoModal, openBookInfoModal } =
+		useContext(AppContext);
 
 	const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
 	const openAddBookModal = () => setIsAddBookModalOpen(true);
@@ -48,7 +45,8 @@ function MainApp() {
 			<Container>
 				<div className="inner">
 					<div className="page-header">
-						<h1>Book Library</h1>
+						<h1>📚 Book Library</h1>
+						{bookInfoModalID}
 						<button onClick={openAddBookModal}>
 							<IoAdd /> Add Book
 						</button>
@@ -59,6 +57,9 @@ function MainApp() {
 								key={book.id}
 								itemNo={index + 1}
 								book={book}
+								openBook={() => {
+									openBookInfoModal(Number(book.id));
+								}}
 							/>
 							{index + 1 !== data.books.length && (
 								<Separator key={index + 1} />
@@ -67,11 +68,7 @@ function MainApp() {
 					))}
 
 					{data.books.length === 0 && (
-						<center>
-							<i>
-								<span>No Books Added</span>
-							</i>
-						</center>
+						<p className="empty">No Books Added</p>
 					)}
 				</div>
 			</Container>
@@ -83,7 +80,6 @@ function MainApp() {
 			/>
 
 			<BookInfoModal
-				bookID={bookInfoModalID}
 				isOpen={bookInfoModalID !== null}
 				closeModal={() => {
 					refetch();

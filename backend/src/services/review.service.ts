@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const { review: Review } = new PrismaClient();
 
 export interface NewReview {
 	content: string;
@@ -9,30 +9,30 @@ export interface NewReview {
 }
 
 export const getAllReviews = async () => {
-	const reviews = await prisma.review.findMany();
+	const reviews = await Review.findMany();
 	return reviews;
 };
 
 export const getSingleReview = async (id: number) => {
-	const review = await prisma.review.findFirstOrThrow({
+	const review = await Review.findFirstOrThrow({
 		where: { id },
 	});
 	return review;
 };
 
 export const createBook = async (newReview: NewReview) => {
-	const review = await prisma.review.create({
+	const review = await Review.create({
 		data: newReview,
 	});
 	return review;
 };
 
 export const getReviewsByBookId = async (book_id: number) => {
-	const reviews = await prisma.review.findMany({ where: { book_id } });
+	const reviews = await Review.findMany({ where: { book_id } });
 	return reviews;
 };
 
 export const deleteBookReviews = async (book_id: number) => {
-	const reviews = await prisma.review.deleteMany({ where: { book_id } });
+	const reviews = await Review.deleteMany({ where: { book_id } });
 	return reviews;
 };

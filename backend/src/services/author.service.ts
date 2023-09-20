@@ -2,22 +2,22 @@ import { PrismaClient } from '@prisma/client';
 
 import { IBook } from './book.service';
 
-const prisma = new PrismaClient();
+const { author: Author } = new PrismaClient();
 
-export interface Author {
+export interface IAuthor {
 	id: number;
 	name: string;
 	books: IBook[];
 }
 
 export const getAllAuthors = async () => {
-	const authors = await prisma.author.findMany();
+	const authors = await Author.findMany();
 
 	return authors;
 };
 
 export const getSingleAuthor = async (id: number) => {
-	const author = await prisma.author.findFirstOrThrow({
+	const author = await Author.findFirstOrThrow({
 		where: { id },
 	});
 
@@ -25,7 +25,7 @@ export const getSingleAuthor = async (id: number) => {
 };
 
 export const createAuthor = async (name: string) => {
-	const newAuthor = await prisma.author.create({
+	const newAuthor = await Author.create({
 		data: { name },
 	});
 
@@ -33,6 +33,6 @@ export const createAuthor = async (name: string) => {
 };
 
 export const deleteAuthor = async (id: number) => {
-	const author = await prisma.author.delete({ where: { id } });
+	const author = await Author.delete({ where: { id } });
 	return author;
 };
